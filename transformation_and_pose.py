@@ -114,14 +114,6 @@ def get_pose_with_pnp(points, points3d):
     return R_matrix, tvec
 
 
-correspondence_data = np.load('correspondence.npz')
-
-pts1 = correspondence_data['pts1']
-pts2 = correspondence_data['pts2']
-
-P = get_transformation(pts1, pts2)
-
-print(P)
 
 
 
