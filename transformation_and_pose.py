@@ -1,11 +1,16 @@
 import cv2
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # Assuming we already have the intrinsic matrix
 
-K = np.array([[350, 0, 960/2], [0, 350, 540/2], [0, 0, 1]])
+K = np.array([
+        [600, 0, 600],
+        [0, 600, 340],
+        [0, 0, 1],
+    ])
 
 # Get correspondences using SIFT and nearest neighbor
 def get_correspondences(img1, img2, dist_thr):
@@ -106,12 +111,58 @@ def get_transformation(points1, points2):
     return np.hstack((best_R, -1*best_R @ best_C))
 
 
-def get_pose_with_pnp(points, points3d):
 
-    retval, rvec, tvec, inliers = cv2.solvePnPRansac(objectPoints=points3d, imagePoints=points, cameraMatrix=K, distCoeffs=None)
-    R_matrix, _ = cv2.Rodrigues(rvec)
+def visualize_find_match(img1, img2, x1, x2, img_h=500, filename=None):
+    assert x1.shape == x2.shape, 'x1 and x2 should have same shape!'
+    scale_factor1 = img_h / img1.shape[0]
+    scale_factor2 = img_h / img2.shape[0]
+    img1_resized = cv2.resize(img1, None, fx=scale_factor1, fy=scale_factor1)
+    img2_resized = cv2.resize(img2, None, fx=scale_factor2, fy=scale_factor2)
+    x1 = x1 * scale_factor1
+    x2 = x2 * scale_factor2
+    x2[:, 0] += img1_resized.shape[1]
+    img = np.hstack((img1_resized, img2_resized))
+    plt.imshow(img, cmap='gray', vmin=0, vmax=255)
+    for i in range(x1.shape[0]):
+        plt.plot([x1[i, 0], x2[i, 0]], [x1[i, 1], x2[i, 1]], 'b')
+        plt.plot([x1[i, 0], x2[i, 0]], [x1[i, 1], x2[i, 1]], 'bo')
+    plt.axis('off')
+    fig = plt.gcf()
+    fig.set_size_inches(16, 9)
+    fig.tight_layout()
+    if filename:   
+        plt.savefig(filename, bbox_inches='tight')
+        plt.clf()
+    else:
+        plt.show()
 
-    return R_matrix, tvec
+
+def proj_to_3d(pts2d, depth, K):
+    fx, fy = K[0, 0], K[1, 1]
+    cx, cy = K[0, 2], K[1, 2]
+    pts3d = []
+    for point in pts2d:
+        u,v = point
+        z = depth[int(v), int(u)]/1000
+        x = (u - cx) * z / fx
+        y = (v - cy) * z / fy
+        pts3d.append([x, y, z])
+    return np.array(pts3d)
+
+
+def get_pose_with_pnp(points1, points2, depth1, K):
+    
+    pts3d_1 = proj_to_3d(points1, depth1, K)
+
+    _, rvec, tvec, _ = cv2.solvePnPRansac(pts3d_1, points2, K, distCoeffs=None)
+
+    R, _ = cv2.Rodrigues(rvec)
+    t = tvec.reshape(3, 1)
+    
+    P1 = np.vstack((np.hstack((R, t)), np.array([0, 0, 0, 1])))
+
+    return P1
+
 
 
 
