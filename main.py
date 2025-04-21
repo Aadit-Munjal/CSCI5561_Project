@@ -7,6 +7,8 @@ import numpy as np
 import copy
 
 from transformation_and_pose import get_correspondences, get_pose_with_pnp
+from icp_scratch import icp
+
 
 
 # Assuming we already have the intrinsic matrix
@@ -106,8 +108,8 @@ pcd2.transform([[1, 0, 0, 0],
 o3d.visualization.draw_geometries([pcd2], window_name="img1 point cloud")
 
 
-source = pcd
-target = pcd2
+source = pcd2
+target = pcd
 
 threshold = 0.02
 
@@ -123,14 +125,25 @@ print(evaluation)
 
 
 print("Apply point-to-point ICP")
-reg_p2p = o3d.pipelines.registration.registration_icp(
-    source, target, threshold, trans_init,
-    o3d.pipelines.registration.TransformationEstimationPointToPoint())
+# reg_p2p = o3d.pipelines.registration.registration_icp(
+#     source, target, threshold, trans_init,
+#     o3d.pipelines.registration.TransformationEstimationPointToPoint())
 
-print(reg_p2p)
-print("Transformation is:")
-print(reg_p2p.transformation)
-draw_registration_result(source, target, reg_p2p.transformation)
+P1 = icp(source, target)
+
+evaluation = o3d.pipelines.registration.evaluate_registration(
+    source, target, threshold, P1)
+print(evaluation)
+
+print("Our tranformation is:")
+print(P1)
+draw_registration_result(source, target, P1)
+
+
+# print(reg_p2p)
+# print("O3d Transformation is:")
+# print(reg_p2p.transformation)
+# draw_registration_result(source, target, reg_p2p.transformation)
 
 
 
