@@ -5,8 +5,8 @@ from sklearn.neighbors import NearestNeighbors
 
 
 def icp(source, target, max_iter=20, tol=1e-5):
-
-    # Downsample pointclouds
+    
+    # Downsample pointclouds - set voxel size to 0.015 for better results
     downpcd = source.voxel_down_sample(voxel_size=0.02)
     downpcd2 = target.voxel_down_sample(voxel_size=0.02)
 
@@ -20,6 +20,10 @@ def icp(source, target, max_iter=20, tol=1e-5):
     for i in range(max_iter):
         # Get correspondence set
         x1, x2 = find_correspondence_set_NN(points1, points2)
+
+        if (np.shape(x1)[0] < 10):
+            break
+
         curr_error = compute_error(x1, x2)
         
         # Exit early if error has gotten worse or very little improvement
@@ -35,9 +39,21 @@ def icp(source, target, max_iter=20, tol=1e-5):
 
         # Compute cross covariance matrix and extract rotation and translation
         W = x1_centered.T @ x2_centered
-        U, _, VT = np.linalg.svd(W)
         
+
+        try:
+            U, _, VT = np.linalg.svd(W)
+        except:
+            break
+        
+
         R = VT.T @ U.T
+
+        # Check for reflection
+        if np.linalg.det(R) < 0:
+            U[:, -1] *= -1
+            R = U @ VT
+
 
         t = x2_center - R @ (x1_center)
 
