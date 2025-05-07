@@ -6,7 +6,7 @@ from sklearn.neighbors import NearestNeighbors
 
 def icp(source, target, max_iter=20, tol=1e-5):
     
-    # Downsample pointclouds - set voxel size to 0.015 for better results
+    # # Downsample pointclouds - set voxel size to 0.015 for better results
     downpcd = source.voxel_down_sample(voxel_size=0.02)
     downpcd2 = target.voxel_down_sample(voxel_size=0.02)
 
@@ -26,7 +26,7 @@ def icp(source, target, max_iter=20, tol=1e-5):
 
         curr_error = compute_error(x1, x2)
         
-        # Exit early if change in error below tolerance
+        # Exit early if change in error is within tolerance
         if abs(prev_error - curr_error) < tol:
             break
         
@@ -38,7 +38,7 @@ def icp(source, target, max_iter=20, tol=1e-5):
         x2_centered = x2 - x2_center
 
         # Compute cross covariance matrix and extract rotation and translation
-        W = x1_centered.T @ x2_centered
+        W = x2_centered.T @ x1_centered
         
 
         try:
@@ -46,13 +46,12 @@ def icp(source, target, max_iter=20, tol=1e-5):
         except:
             break
         
-
-        R = VT.T @ U.T
+        R = U @ VT
 
         # Check for reflection
         if np.linalg.det(R) < 0:
             U[:, -1] *= -1
-            R = VT.T @ U.T
+            R = U @ VT
 
 
         t = x2_center - R @ (x1_center)
