@@ -26,8 +26,8 @@ def icp(source, target, max_iter=20, tol=1e-5):
 
         curr_error = compute_error(x1, x2)
         
-        # Exit early if error has gotten worse or very little improvement
-        if (prev_error - curr_error) < tol:
+        # Exit early if change in error below tolerance
+        if abs(prev_error - curr_error) < tol:
             break
         
 
@@ -52,7 +52,7 @@ def icp(source, target, max_iter=20, tol=1e-5):
         # Check for reflection
         if np.linalg.det(R) < 0:
             U[:, -1] *= -1
-            R = U @ VT
+            R = VT.T @ U.T
 
 
         t = x2_center - R @ (x1_center)
