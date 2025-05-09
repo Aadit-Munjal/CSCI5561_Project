@@ -61,6 +61,14 @@ for i in range(len(cv2_color_images)):
 
 final_pcds = []
 
+pre_icp_rmses = []
+post_icp_rmses = []
+
+pre_icp_fitnesses = []
+post_icp_fitnesses = []
+
+num_nonzero = 0
+
 for image_num in range(len(extrinsics)):
     
     rgbd_image = o3d.geometry.RGBDImage.create_from_color_and_depth(
@@ -82,6 +90,7 @@ for image_num in range(len(extrinsics)):
     if image_num == 0:
         final_pcds.append(pcd)
     else:
+
         P = icp(pcd, final_pcds[0])
     
         evaluation = o3d.pipelines.registration.evaluate_registration(
@@ -89,14 +98,38 @@ for image_num in range(len(extrinsics)):
         print("pre-icp")
         print(evaluation)
         
+        if np.shape(evaluation.correspondence_set)[0] != 0:
+            pre_icp_rmse = float(evaluation.inlier_rmse)
+            pre_icp_rmses.append(pre_icp_rmse)
+            pre_icp_fitnesses.append(evaluation.fitness)
+            num_nonzero += 1
+    
+
         
         evaluation = o3d.pipelines.registration.evaluate_registration(
             pcd, final_pcds[0], 0.02, P)
         print("post-icp")
         print(evaluation)
+
+        if np.shape(evaluation.correspondence_set)[0] != 0:
+            
+            post_icp_rmse = float(evaluation.inlier_rmse)
+            post_icp_rmses.append(post_icp_rmse)
+            post_icp_fitnesses.append(evaluation.fitness)
         
         pcd.transform(P)
         final_pcds.append(pcd)
 
 
+print(f"Average RMSE pre-ICP: {np.sum(np.array(pre_icp_rmses))/num_nonzero}")
+print(f"Average RMSE post-ICP: {np.sum(np.array(post_icp_rmses))/num_nonzero}")
+
+print(f"Average fitness pre-ICP: {np.sum(np.array(pre_icp_fitnesses))/num_nonzero}")
+print(f"Average fitness post-ICP: {np.sum(np.array(post_icp_fitnesses))/num_nonzero}")
+
+
+for i in range(len(final_pcds)):
+    final_pcds[i] = final_pcds[i].voxel_down_sample(voxel_size=0.02)    
+    
 o3d.visualization.draw_geometries(final_pcds)
+
