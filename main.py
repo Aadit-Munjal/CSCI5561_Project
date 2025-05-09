@@ -83,25 +83,12 @@ for image_num in range(len(extrinsics)):
         final_pcds.append(pcd)
     else:
         P = icp(pcd, final_pcds[0])
-
-        # reg_p2p = o3d.pipelines.registration.registration_icp(
-        #     pcd, final_pcds[0], 0.02, np.identity(4),
-        #     o3d.pipelines.registration.TransformationEstimationPointToPoint()
-
-        # )
-
-        # P = reg_p2p.transformation
-        
-        # draw_registration_result(pcd, final_pcds[0], np.identity(4))
-        
     
         evaluation = o3d.pipelines.registration.evaluate_registration(
             pcd, final_pcds[0], 0.02, np.identity(4))
         print("pre-icp")
         print(evaluation)
         
-       
-        # draw_registration_result(pcd, final_pcds[0], P)
         
         evaluation = o3d.pipelines.registration.evaluate_registration(
             pcd, final_pcds[0], 0.02, P)

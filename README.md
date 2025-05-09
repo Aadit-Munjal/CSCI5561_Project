@@ -1,1 +1,1 @@
-# CSCI5561_Project
+# Semantic 3D Reconstruction for Indoor AI Agents
