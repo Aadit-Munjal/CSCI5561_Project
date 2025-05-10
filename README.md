@@ -11,6 +11,7 @@ The primary goal is to implement a full 3D semantic reconstruction pipeline:
 3.  **Estimation of Extrinsic Parameters**:  The extrinsic parameters are obtained for each image pair using the Perspective-n-Point algorithm.
 4.  **Point Cloud Generation**: Point clouds are generated based on the semantically segmented images and corresponding depth data.
 5.  **ICP**:  The Iterative Closest Point algorithm is used to augment the alignment of the point clouds.
+6.  **Visualization**: A unified point cloud consisting of aligned, down-sampled point clouds from all frames is visualized.
 
 ## Dataset
 
@@ -24,7 +25,7 @@ CSCI5561_Project/
 ├── detection_segmentation/        # Implementations of object detection, semantic segmentation, and instance segmentation
     ├── dataset/                   # Dataset file for finetuning instance segmentation model
     ├── demo/                      # Demonstration of COCO instance segmentation visualization
-    ├── dataset/                   # Implementation of object detection and semantic segmentation from scratch in PyTorch
+    ├── scratch/                   # Implementation of object detection and semantic segmentation from scratch in PyTorch
     ├── coco_rle_to_poly.py        # Convert COCO RLE label to polygon label
     ├── config.py                  # Dataset configuration file
     ├── convert_yolo.py            # Convert COCO polygon label to YOLO label
