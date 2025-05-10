@@ -30,7 +30,7 @@ CSCI5561_Project/
     ├── config.py                  # Dataset configuration file
     ├── convert_yolo.py            # Convert COCO polygon label to YOLO label
     ├── label_information.py       # Preprocess vMAP dataset label information
-    ├── mask_to_coco_rle           # Convert grayscale segmentation masks to COCO RLE label
+    ├── mask_to_coco_rle.py           # Convert grayscale segmentation masks to COCO RLE label
     ├── shift_index.py             # Decrement COCO semantic index to YOLO
     ├── training.py                # YOLO11 model training
     ├── validation.py              # YOLO11 model validation             
@@ -50,7 +50,7 @@ CSCI5561_Project/
 1.  Clone the repository:
     ```bash
     git clone https://github.com/Aadit-Munjal/CSCI5561_Project
-    cd 5561_Project
+    cd CSCI5561_Project
     ```
 2.  Create and activate virtual environment (highly recommended):
    
