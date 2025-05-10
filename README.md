@@ -52,8 +52,9 @@ CSCI5561_Project/
     cd 5561_Project
     ```
 2.  Create and activate virtual environment (highly recommended):
-    Open3D only supports python versions 3.8 - 3.12. This project was tested and run on a windows machine with python 3.9.13 installed.
-3.  To install all necessary packages, the following command can be utilized:
+   
+    Open3D only supports python versions 3.8 - 3.12. The 3D reconstruction pipeline was tested and run on a windows machine with python 3.9.13 installed.
+4.  To install all necessary packages, the following command can be utilized:
     ```bash
     pip install -r requirements.txt
     ```
