@@ -36,10 +36,11 @@ CSCI5561_Project/
     ├── validation.py              # YOLO11 model validation             
     └── visualize_coco.py          # Visualize COCO instance segmentation labels
 ├── rgb/
-├── README.md                      # This file       
+├── README.md                      # This file
+├── environment.yml                # Instance segmentation dependencies
 ├── icp_scratch.py
 ├── main.py
-├── requirements.txt               # Project dependencies
+├── requirements.txt               # 3D reconstruction dependencies
 └── transformation_and_pose.py     
 ```
 
