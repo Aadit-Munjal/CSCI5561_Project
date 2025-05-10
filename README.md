@@ -21,7 +21,7 @@ We utilized office 0 of the vMAP dataset processed from the Replica Dataset.
 
 ```
 CSCI5561_Project/
-├── depth/
+├── depth/                         # Depth data for 3D reconstruction (post keyframe selection)
 ├── detection_segmentation/        # Implementations of object detection, semantic segmentation, and instance segmentation
     ├── dataset/                   # Dataset file for finetuning instance segmentation model
     ├── demo/                      # Demonstration of COCO instance segmentation visualization
@@ -35,13 +35,14 @@ CSCI5561_Project/
     ├── training.py                # YOLO11 model training
     ├── validation.py              # YOLO11 model validation             
     └── visualize_coco.py          # Visualize COCO instance segmentation labels
-├── rgb/
+├── rgb/                           # RGB data for 3D reconstruction (post keyframe selection)
+├── semantic_instance-viz          # Ground truth segmentation data for 3D reconstruction (post keyframe selection)
 ├── README.md                      # This file
 ├── environment.yml                # Instance segmentation dependencies
-├── icp_scratch.py
-├── main.py
+├── icp_scratch.py                 # Implementation of point-to-point ICP from scratch
+├── main.py                        # Main file for 3D reconstruction
 ├── requirements.txt               # 3D reconstruction dependencies
-└── transformation_and_pose.py     
+└── transformation_and_pose.py     # Code for extrinsics calibration
 ```
 
 
