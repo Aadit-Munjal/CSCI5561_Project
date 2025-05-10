@@ -53,12 +53,15 @@ CSCI5561_Project/
     ```
 2.  Create and activate virtual environment (highly recommended):
    
-    Open3D only supports python versions 3.8 - 3.12. The 3D reconstruction pipeline was tested and run on a windows machine with python 3.9.13 installed.
-4.  To install all necessary packages, the following command can be utilized:
+    Open3D only supports python versions 3.8 - 3.12. The 3D reconstruction pipeline was tested and run on a windows machine with python 3.9.13 installed. The instance segmentation pipeline was tested and run on a windows machine with python 3.13.2 in conda environment. The two pipelines have conflicting dependency requirements and have to be run separately.
+4.  To install all necessary packages for 3D reconstruction, the following command can be utilized:
     ```bash
     pip install -r requirements.txt
     ```
-
+    To install all necessary packages for instance segmentation, the following command can be utilized:
+    ```bash
+    conda env update -f environment.yml
+    ```
 
 
 
