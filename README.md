@@ -14,7 +14,7 @@ The primary goal is to implement a full 3D semantic reconstruction pipeline:
 
 ## Dataset
 
-We utilized office 0 of vMAP dataset processed from the Replica Dataset.
+We utilized office 0 of the vMAP dataset processed from the Replica Dataset.
 
 ## Project Structure
 
